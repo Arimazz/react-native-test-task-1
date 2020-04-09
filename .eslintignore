@@ -1,0 +1,7 @@
+/build
+/node_modules
+/package.json
+/app.json
+/babel.config.js
+/package-lock.json
+/REFERENSE

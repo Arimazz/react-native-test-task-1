@@ -1,26 +1,36 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Text, Button, View } from 'react-native';
 import { getData } from './api';
+import { styles } from './AppStyles';
+import { Item } from './Item';
 
 export default function App() {
-  useEffect(() => {
-    const data = getData();
+  const [data, setData] = useState([]);
 
-    console.log(data);
-  }, []);
+  const loadData = async() => {
+    const dataFromServer = await getData();
+
+    setData(dataFromServer);
+  };
+
+  const item = data[0];
+
+  if (item) {
+    return (
+      <View style={styles.container}>
+        <Item item={item} />
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      <Text>Hehehehehe</Text>
+    <View>
+      <Text>Data loading</Text>
+      <Button
+        style={styles.button}
+        title="loaddata"
+        onPress={() => loadData()}
+      />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

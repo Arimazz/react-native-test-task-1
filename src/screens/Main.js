@@ -26,6 +26,8 @@ export const MainContainer = ({ navigation, data, setDataInStore }) => {
     );
   }
 
+  console.log(data.length)
+
   return (
     <SafeAreaView>
       <FlatList
@@ -37,7 +39,7 @@ export const MainContainer = ({ navigation, data, setDataInStore }) => {
           const mainImage = item.urls.regular;
 
           return (
-            <View>
+            <View style={style.container}>
               <View style={style.profile}>
                 <Image style={style.profileImage} source={{ uri: profileImage }} />
                 <Text style={style.profileText}>{userName}</Text>
@@ -58,16 +60,22 @@ const style = StyleSheet.create({
   main: {
     flex: 1,
   },
+  container: {
+    marginTop: 20,
+  },
   profile: {
+    marginBottom: 5,
     flexDirection: 'row',
     alignItems: 'center',
   },
   profileImage: {
     width: 40,
     height: 40,
+    borderRadius: 20,
   },
   profileText: {
     fontSize: 20,
+    marginLeft: 10,
   },
   mainImage: {
     width: Dimensions.get('window').width,

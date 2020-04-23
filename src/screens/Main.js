@@ -1,5 +1,13 @@
 import React, { useEffect } from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  SafeAreaView,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FlatList } from 'react-native-gesture-handler';
@@ -7,7 +15,6 @@ import { setData } from '../store';
 import { getData } from '../api';
 
 export const MainContainer = ({ navigation, data, setDataInStore }) => {
-
   useEffect(() => {
     async function fetchData() {
       const dataFromServer = await getData();
@@ -26,26 +33,33 @@ export const MainContainer = ({ navigation, data, setDataInStore }) => {
     );
   }
 
-  console.log(data.length)
-
   return (
     <SafeAreaView>
       <FlatList
+        numColumns={2}
         data={data}
         keyExtractor={item => item.id}
         renderItem={({ item }) => {
-          const profileImage = item.user.profile_image.medium;
           const userName = item.user.first_name;
           const mainImage = item.urls.regular;
 
           return (
             <View style={style.container}>
               <View style={style.profile}>
-                <Image style={style.profileImage} source={{ uri: profileImage }} />
-                <Text style={style.profileText}>{userName}</Text>
+                <Text style={style.profileText}>
+                  {userName}
+                </Text>
               </View>
-              <TouchableOpacity activeOpacity={0.7} onPress={() => { navigation.navigate("Photo", { imgUrl: mainImage }) }}>
-                <Image style={style.mainImage} source={{ uri: mainImage }} />
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  navigation.navigate('Photo', { imgUrl: mainImage });
+                }}
+              >
+                <Image
+                  style={style.mainImage}
+                  source={{ uri: mainImage }}
+                />
               </TouchableOpacity>
             </View>
           );
@@ -56,15 +70,17 @@ export const MainContainer = ({ navigation, data, setDataInStore }) => {
   );
 };
 
+// styles
+const screenWidth = Dimensions.get('screen').width;
+const fontSize = 15;
+
 const style = StyleSheet.create({
-  main: {
-    flex: 1,
-  },
   container: {
-    marginTop: 20,
+    marginTop: 5,
+    width: screenWidth / 2,
+    height: screenWidth / 2 + fontSize,
   },
   profile: {
-    marginBottom: 5,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -74,32 +90,35 @@ const style = StyleSheet.create({
     borderRadius: 20,
   },
   profileText: {
-    fontSize: 20,
-    marginLeft: 10,
+    fontSize,
+    marginLeft: 5,
   },
   mainImage: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').width,
+    width: screenWidth / 2,
+    height: screenWidth / 2,
   },
 });
 
-const stateToProps = (state) => {
-  return {
-    data: state.data,
-  };
-};
+// store
+const stateToProps = state => ({
+  data: state.data,
+});
 
-const dispatchToProps = (dispatch) => {
-  return {
-    setDataInStore: dataFromServer => dispatch(setData(dataFromServer)),
-  };
-};
+const dispatchToProps = dispatch => ({
+  setDataInStore: dataFromServer => dispatch(setData(dataFromServer)),
+});
 
 export const Main = connect(stateToProps, dispatchToProps)(MainContainer);
 
+// types
 MainContainer.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
-
+    user: PropTypes.shape({
+      first_name: PropTypes.string,
+    }),
+    urls: PropTypes.shape({
+      regular: PropTypes.string,
+    }),
   })).isRequired,
   setDataInStore: PropTypes.func.isRequired,
   navigation: PropTypes.shape({

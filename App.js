@@ -12,6 +12,7 @@ export default function App() {
   );
 }
 
+// styles
 const styles = StyleSheet.create({
   main: {
     flex: 1,

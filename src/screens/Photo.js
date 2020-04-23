@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Dimensions } from 'react-native';
+import PropTypes from 'prop-types';
 
 export const Photo = (props) => {
   const { imgUrl } = props.route.params;
@@ -15,3 +16,12 @@ const style = StyleSheet.create({
     height: Dimensions.get('window').width,
   },
 });
+
+Photo.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      imgUrl: PropTypes.string,
+    }),
+  }).isRequired,
+
+};
